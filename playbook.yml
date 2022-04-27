@@ -1,0 +1,56 @@
+---
+- name: Install tools and packages
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Install Python-PIP 
+    apt:
+      name: python-pip
+      update_cache: yes
+      cache_valid_time: 432000
+    become: true
+  - name: Install lxml
+    pip:
+      name: lxml 
+    become: true
+  - name: Download Java artifact
+    maven_artifact:
+      group_id: pl.pandait
+      artifact_id: panda
+      repository_url: /http://10.200.0.159/:8081/artifactory/libs-release-local
+      username: admin 
+      password: Pandapass1
+      dest: ./application.jar
+
+
+- name: Install Java
+  hosts: aws
+  tasks:
+  - name: Install java
+    apt:
+      name: default-jre
+      update_cache: yes
+    become: true
+- name: Deploy application 
+  hosts: aws
+  tasks:
+  - name: Copy application
+    copy:
+      src: ./application.jar
+      dest: /home/ubuntu
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
+  - name: Copy service definition
+    copy:
+      src: ./application.service 
+      dest: /etc/systemd/system/ 
+      owner: ubuntu
+      group: ubuntu
+      mode: '0744'
+    become: true
+  - name: Start application
+    service:
+      name: application
+      state: restarted 
+    become: true
