@@ -5,7 +5,7 @@
   tasks:
   - name: Install Python-PIP 
     apt:
-      name: python-pip
+      name: python3-pip
       update_cache: yes
       cache_valid_time: 432000
     become: true
