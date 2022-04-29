@@ -15,15 +15,15 @@
     become: true
   - name: Download Java artifact
     maven_artifact:
-      group_id: pl.pandait
-      artifact_id: panda
+      group_id: pl.jp
+      artifact_id: jp
       repository_url: /http://10.200.0.159/:8081/artifactory/libs-release-local
       username: admin 
       password: Pandapass1
       dest: ./application.jar
 
 
-- name: Install Java
+- name: Instalacja Javy (JRE)
   hosts: aws
   tasks:
   - name: Install java
@@ -41,7 +41,7 @@
       owner: ubuntu
       group: ubuntu
       mode: '0644'
-  - name: Copy service definition
+  - name: Kopia service definition
     copy:
       src: ./application.service 
       dest: /etc/systemd/system/ 
@@ -49,7 +49,7 @@
       group: ubuntu
       mode: '0744'
     become: true
-  - name: Start application
+  - name: Uruchomienie aplikacji
     service:
       name: application
       state: restarted 
