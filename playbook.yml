@@ -1,9 +1,9 @@
 ---
-- name: Install tools and packages
+- name: Instalacja narzedzi
   hosts: localhost
   connection: local
   tasks:
-  - name: Install Python-PIP 
+  - name: Instalacja Python-PIP 
     apt:
       name: python3-pip
       update_cache: yes
@@ -13,7 +13,7 @@
     pip:
       name: lxml 
     become: true
-  - name: Download Java artifact
+  - name: Pobranie artifactu
     maven_artifact:
       group_id: pl.jp
       artifact_id: jp
@@ -23,25 +23,25 @@
       dest: ./application.jar
 
 
-- name: Instalacja Javy (JRE)
+- name: Instalacja srodowiska
   hosts: aws
   tasks:
-  - name: Install java
+  - name: Instalacja Javy (JRE)
     apt:
       name: default-jre
       update_cache: yes
     become: true
-- name: Deploy application 
+- name: Deploy aplikacji 
   hosts: aws
   tasks:
-  - name: Copy application
+  - name: Kopiowanie aplikacji
     copy:
       src: ./application.jar
       dest: /home/ubuntu
       owner: ubuntu
       group: ubuntu
       mode: '0644'
-  - name: Kopia service definition
+  - name: Kopiowanie definicji serwisu
     copy:
       src: ./application.service 
       dest: /etc/systemd/system/ 
